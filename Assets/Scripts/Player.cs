@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     private float fireDelay;
     [SerializeField]
     private float fireRate = .3f;
+    [SerializeField]
+    private int _playerLives = 5;
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -51,5 +53,14 @@ public class Player : MonoBehaviour
     {
         fireDelay = Time.time + fireRate;
         Instantiate(bullet, new Vector3(transform.position.x, transform.position.y + 1.05f, 0), Quaternion.identity);
+    }
+    public void Damage()
+    {
+        _playerLives--;
+
+        if (_playerLives <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }

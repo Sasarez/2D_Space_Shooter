@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+
+    private int _score = 0;
     private float _speed = 4f;
     // Start is called before the first frame update
     void Start()
@@ -24,6 +26,31 @@ public class Enemy : MonoBehaviour
         if (transform.position.y < -5.38)
         {
             transform.position = new Vector3(Random.Range(-8.48f, 8.45f), 7.44f, 0);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+
+        // if we collide with the player
+        // we want to decrease lives of the player
+        // destroy this
+        // else if we collide with a bullet
+        // we just want to destroy this
+        if (other.transform.tag == "Player")
+        {
+            Player player = other.transform.GetComponent<Player>();
+            if (player != null)
+            {
+                player.Damage();
+            }
+            Destroy(gameObject);
+        }
+        else if (other.transform.tag == "Projectile")
+        {
+            _score = _score + 10;
+            Destroy(other.gameObject);
+            Destroy(gameObject);
         }
     }
 }
