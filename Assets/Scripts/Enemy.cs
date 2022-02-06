@@ -5,9 +5,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    private int _score = 0;
+
     private float _speed = 4f;
     // Start is called before the first frame update
+    [SerializeField]
+    GameObject _player;
     void Start()
     {
 
@@ -29,14 +31,11 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
+
+
     {
 
-        // if we collide with the player
-        // we want to decrease lives of the player
-        // destroy this
-        // else if we collide with a bullet
-        // we just want to destroy this
         if (other.transform.tag == "Player")
         {
             Player player = other.transform.GetComponent<Player>();
@@ -48,7 +47,12 @@ public class Enemy : MonoBehaviour
         }
         else if (other.transform.tag == "Projectile")
         {
-            _score = _score + 10;
+            Player player = _player.transform.GetComponent<Player>();
+            if (player != null)
+            {
+                player.Score(10);
+            }
+
             Destroy(other.gameObject);
             Destroy(gameObject);
         }

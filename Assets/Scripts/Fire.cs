@@ -13,6 +13,10 @@ public class Fire : MonoBehaviour
         transform.Translate(new Vector3(0, _speed * Time.deltaTime, 0));
         if (transform.position.y > 8)
         {
+            if (transform.parent)
+            {
+                Destroy(transform.parent.gameObject);
+            }
             Destroy(gameObject);
         }
     }
