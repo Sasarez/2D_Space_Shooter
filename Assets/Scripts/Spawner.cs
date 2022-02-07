@@ -19,23 +19,24 @@ public class Spawner : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
-        StartCoroutine(PowerUpSpawnRoutine());
+
     }
 
     // Update is called once per frame
-    void Update()
+    public void BeginSpawning()
     {
-
+        StartCoroutine(SpawnRoutine());
+        StartCoroutine(PowerUpSpawnRoutine());
     }
-
     //spawn our enemy every 5 seconds
     //create a coroutine of type IEnumerator
     //in an infinite while loop
     IEnumerator SpawnRoutine()
     {
+        yield return new WaitForSeconds(3);
         while (spawningEnemies)
         {
+
             GameObject newEnemy = Instantiate(_enemy, new Vector3(Random.Range(-8, 8), -11, 0), Quaternion.identity);
             newEnemy.transform.parent = _enemyContainer.transform;
             yield return new WaitForSeconds(Random.Range(.5f, _waitTime));
@@ -43,6 +44,7 @@ public class Spawner : MonoBehaviour
     }
     IEnumerator PowerUpSpawnRoutine()
     {
+        yield return new WaitForSeconds(3);
         while (spawningEnemies)
         {
 

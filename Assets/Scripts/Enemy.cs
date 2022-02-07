@@ -4,14 +4,28 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-
-
+    [SerializeField]
+    AudioClip _explosionAudio;
+    AudioSource _audioSource;
+    Animator enemyDeathAnim;
     private float _speed = 4f;
     // Start is called before the first frame update
-    [SerializeField]
     GameObject _player;
+    bool _enemyDead = false;
     void Start()
     {
+        _player = GameObject.FindGameObjectWithTag("Player");
+        _audioSource = GetComponent<AudioSource>();
+        enemyDeathAnim = GetComponent<Animator>();
+        if (_audioSource == null)
+        {
+            Debug.LogError("Audio Source on the Enemy is NULL");
+        }
+        if (enemyDeathAnim == null)
+        {
+            Debug.LogError("Death Animation is Null!");
+
+        }
 
     }
 
@@ -25,7 +39,7 @@ public class Enemy : MonoBehaviour
         //pos at top is 7.44
         //pos at bottom is -5.38
         //far left -8.48 far right 8.45
-        if (transform.position.y < -5.38)
+        if (transform.position.y < -5.38 && !_enemyDead)
         {
             transform.position = new Vector3(Random.Range(-8.48f, 8.45f), 7.44f, 0);
         }
@@ -43,7 +57,9 @@ public class Enemy : MonoBehaviour
             {
                 player.Damage();
             }
-            Destroy(gameObject);
+            _audioSource.clip = _explosionAudio;
+            _audioSource.Play();
+            EnemyDeath();
         }
         else if (other.transform.tag == "Projectile")
         {
@@ -52,9 +68,21 @@ public class Enemy : MonoBehaviour
             {
                 player.Score(10);
             }
-
+            _audioSource.clip = _explosionAudio;
+            _audioSource.Play();
             Destroy(other.gameObject);
-            Destroy(gameObject);
+            EnemyDeath();
+
+
+            //Destroy(gameObject);
         }
     }
+    void EnemyDeath()
+    {
+        _speed = 0;
+        gameObject.GetComponent<Collider2D>().enabled = false;
+        enemyDeathAnim.SetTrigger("OnEnemyDeath");
+        Destroy(gameObject, 2.5f);
+    }
+
 }
